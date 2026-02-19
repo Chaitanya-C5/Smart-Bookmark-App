@@ -97,11 +97,32 @@ export default function Home() {
     }
   };
 
+  const handleDelete = async (id: string) => {
+  const { error } = await supabase
+    .from("bookmarks")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    console.error(error);
+    alert("Error deleting bookmark");
+  }
+};
+
   if (loading) return <div>Loading...</div>;
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center gap-4">
       <h1 className="text-3xl font-bold">Smart Bookmark App</h1>
+      <button
+        onClick={async () => {
+          await supabase.auth.signOut();
+          router.push("/login");
+        }}
+        className="absolute top-4 right-4 text-sm"
+      >
+        Logout
+      </button>
 
       <input
         type="text"
@@ -135,15 +156,24 @@ export default function Home() {
               key={bookmark.id}
               className="border p-3 rounded mb-2 flex justify-between"
             >
-              <div>
-                <p className="font-semibold">{bookmark.title}</p>
-                <a
-                  href={bookmark.url}
-                  target="_blank"
-                  className="text-blue-500 text-sm"
+              <div className="flex justify-between items-center w-full">
+                <div>
+                  <p className="font-semibold">{bookmark.title}</p>
+                  <a
+                    href={bookmark.url}
+                    target="_blank"
+                    className="text-blue-500 text-sm"
+                  >
+                    {bookmark.url}
+                  </a>
+                </div>
+
+                <button
+                  onClick={() => handleDelete(bookmark.id)}
+                  className="text-red-500 text-sm"
                 >
-                  {bookmark.url}
-                </a>
+                  Delete
+                </button>
               </div>
             </div>
           ))
