@@ -19,6 +19,7 @@ export default function Home() {
         router.push("/login");
       } else {
         setLoading(false);
+        
         const { data: bookmarksData, error } = await supabase
           .from("bookmarks")
           .select("*")
@@ -32,6 +33,43 @@ export default function Home() {
 
     checkUser();
   }, [router]);
+
+  useEffect(() => {
+    const setupRealtime = async () => {
+      const { data } = await supabase.auth.getSession();
+
+      if (!data.session) return;
+
+      const channel = supabase
+        .channel("bookmarks-channel")
+        .on(
+          "postgres_changes",
+          {
+            event: "*",
+            schema: "public",
+            table: "bookmarks",
+          },
+          (payload) => {
+            if (payload.eventType === "INSERT") {
+              setBookmarks((prev) => [payload.new, ...prev]);
+            }
+
+            if (payload.eventType === "DELETE") {
+              setBookmarks((prev) =>
+                prev.filter((b) => b.id !== payload.old.id)
+              );
+            }
+          }
+        )
+        .subscribe();
+
+      return () => {
+        supabase.removeChannel(channel);
+      };
+    };
+
+    setupRealtime();
+  }, []);
 
   const handleAddBookmark = async () => {
     const { data: sessionData } = await supabase.auth.getSession();
