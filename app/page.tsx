@@ -126,7 +126,7 @@ export default function Home() {
                 <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
               </svg>
             </div>
-            <span className="font-semibold text-slate-800 text-lg">Bookmarks</span>
+            <span className="font-semibold text-slate-800 text-lg">Smart Bookmarks</span>
           </div>
           <button
             onClick={async () => {
