@@ -3,6 +3,7 @@
 A simple full-stack bookmark manager built with Next.js (App Router), Supabase, and Tailwind CSS.
 
 Live Demo: [https://smart-bookmark-app-ten-blond.vercel.app/](https://smart-bookmark-app-ten-blond.vercel.app/)
+
 GitHub Repo: [https://github.com/Chaitanya-C5/Smart-Bookmark-App/](https://github.com/Chaitanya-C5/Smart-Bookmark-App/)
 
 ---
